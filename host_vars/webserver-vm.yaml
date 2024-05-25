@@ -1,0 +1,8 @@
+app:
+  env:
+    frontendappdir: "{{ ansible_user_dir }}/frontend"
+    branch: "main"
+    site_location: /var/www/vue
+    vue_url:  http://192.168.56.103
+
+service:    

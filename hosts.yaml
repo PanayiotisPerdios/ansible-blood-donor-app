@@ -8,17 +8,10 @@ control:
 
 appservers:
     hosts:
-      appserver-vm:
-        ansible_host: appserver
-      frontend-vm:
-        ansible_host: frontserver
       gcloud-app-server:
         ansible_host: devops-gcloud
-      
 
-dbservers:
+webservers:
     hosts:
-      dbserver-vm:
-          ansible_host: dbserver
-      azure-db-server:
-          ansible_host: devops-azure
+      azure-web-server:
+        ansible_host: devops-azure

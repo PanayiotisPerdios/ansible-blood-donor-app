@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+
+  tasks:
+    - name: Check if Docker is installed
+      shell: docker --version && docker compose version
+      register: docker_version_result
+      ignore_errors: true
+
+    - name: Set Docker installed fact
+      set_fact:
+        docker_installed: "{{ docker_version_result.rc == 0 }}"
+
+    - name: Include install_docker playbook if Docker is not installed
+      include_tasks: docker.yml
+      when: not docker_installed  
+
+    - name: Start a docker PostgreSQL container
+      community.docker.docker_container:
+        name: BloodDonor-Database
+        image: postgres:14
+        state: started
+        env:
+          POSTGRES_PASSWORD: "pass123"
+          POSTGRES_USER: "dbuser"
+          POSTGRES_DB: "BloodDonors"
+        volumes:
+            - ds-lab-vol:/var/lib/postgresql/data
+        network_mode: host
+        restart_policy: no
+
+

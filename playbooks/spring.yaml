@@ -16,7 +16,7 @@
 
       - name: "Clone the Spring repository"
         git:
-            repo: "https://github.com/tsadimasteaching/ds-lab-2023.git"
+            repo: "https://github.com/JohnSkouloudis/BloodDonorApp-Backend"
             dest: "{{ appdir }}"
             version: "{{ branch }}"
             force: yes
@@ -30,10 +30,17 @@
         with_items:
           - "{{app.env | dict2items}}"
 
+      - name: "Ensure mvnw is executable"
+        file:
+          path: "{{ appdir }}/mvnw"
+          mode: '0755'
+          state: file
+
       - name: "Build the Spring application"
         command: "./mvnw package -Dmaven.test.skip "
         args:
             chdir: "{{ appdir }}"
+        become: yes
 
 #      - name: "Run the Spring application"
 #        command: "java -jar target/springbootdemo-0.0.1-SNAPSHOT.jar"
@@ -63,8 +70,8 @@
 
       - name: "APT - install nginx"
         apt:
-          name: nginx
           update_cache: yes
+          name: nginx
         become: yes
 
       - name: copy nginx conf file
@@ -100,3 +107,4 @@
       name: nginx
       state: restarted
     become: yes
+
