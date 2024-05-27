@@ -4,6 +4,7 @@
   become_user: root
 
   tasks:
+
     - name: Check if Docker is installed
       shell: docker --version && docker compose version
       register: docker_version_result
@@ -15,7 +16,7 @@
 
     - name: Include install_docker playbook if Docker is not installed
       include_tasks: docker.yml
-      when: not docker_installed  
+      when: not docker_installed
 
     - name: Start a docker PostgreSQL container
       community.docker.docker_container:

@@ -15,3 +15,10 @@ webservers:
     hosts:
       azure-web-server:
         ansible_host: devops-azure
+
+dbservers:
+    hosts:
+      dbserver-vm:
+          ansible_host: dbserver
+      azure-db-server:
+          ansible_host: devops-db-azure

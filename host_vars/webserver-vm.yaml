@@ -1,8 +1,7 @@
 app:
   env:
-    frontendappdir: "{{ ansible_user_dir }}/frontend"
-    branch: "main"
-    site_location: /var/www/vue
-    vue_url:  http://192.168.56.103
+    VITE_BACKEND: http://34.79.93.245:9090
 
-service:    
+service:
+  workingdir: "{{ ansible_user_dir }}/frontend"
+  execstart: "{{ ansible_user_dir }}/.nvm/versions/node/v20.12.1/bin/serve -s dist"

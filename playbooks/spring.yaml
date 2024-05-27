@@ -42,12 +42,7 @@
             chdir: "{{ appdir }}"
         become: yes
 
-#      - name: "Run the Spring application"
-#        command: "java -jar target/springbootdemo-0.0.1-SNAPSHOT.jar"
-#        args:
-#            chdir: "{{ appdir }}"
-
-      - name: copy spring service file
+      - name: "Copy spring service file"
         template:
           src: ../files/spring.service.j2
           dest: "/etc/systemd/system/spring.service"
@@ -55,56 +50,24 @@
         become_user: root
         notify: restart spring
 
-      - name: reload spring service
+      - name: "Reload spring service"
         service:
           name: spring
           state: restarted
         become: yes
 
-      - name: ensure spring service started
+      - name: "nsure spring service started"
         service:
           name: spring
           state: started
           enabled: yes
         become: yes
 
-      - name: "APT - install nginx"
-        apt:
-          update_cache: yes
-          name: nginx
-        become: yes
-
-      - name: copy nginx conf file
-        template:
-          src: ../files/nginx.http.j2
-          dest: "/etc/nginx/sites-available/spring"
-        become: yes
-
-      - name: enable spring site in nginx
-        file:
-          src: "/etc/nginx/sites-available/spring"
-          dest: "/etc/nginx/sites-enabled/spring"
-          state: link
-        become: yes
-        notify: restart nginx
-
-      - name: de-activate default nginx site
-        file:
-          path: /etc/nginx/sites-enabled/default
-          state: absent
-        become: yes
-        notify: restart nginx
 
   handlers:
   - name: restart spring
     service:
       name: spring
-      state: restarted
-    become: yes
-
-  - name: restart nginx
-    service:
-      name: nginx
       state: restarted
     become: yes
 
