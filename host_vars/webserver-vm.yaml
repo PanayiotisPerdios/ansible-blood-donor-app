@@ -1,7 +1,0 @@
-app:
-  env:
-    VITE_BACKEND: http://34.79.93.245:9090
-
-service:
-  workingdir: "{{ ansible_user_dir }}/frontend"
-  execstart: "{{ ansible_user_dir }}/.nvm/versions/node/v20.12.1/bin/serve -s dist"

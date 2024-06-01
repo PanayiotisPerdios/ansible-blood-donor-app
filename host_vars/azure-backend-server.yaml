@@ -4,9 +4,8 @@ app:
     spring.datasource.username: dbuser
     spring.datasource.password: pass123
     spring.datasource.url: jdbc:postgresql://20.166.249.54:5432/BloodDonors
-    frontend.ip: 52.169.68.193:80
-
+    frontend.ip: http://52.169.68.193
 
 service:
-  workingdir: "/home/rc/spring"
+  workingdir: "{{ ansible_user_dir }}/spring"
   execstart: "java -jar target/BloodDonorApp-0.0.1-SNAPSHOT.jar"

@@ -1,5 +1,5 @@
 ---
-- hosts: webservers
+- hosts: frontendservers
 
   pre_tasks:
 

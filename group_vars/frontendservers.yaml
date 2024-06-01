@@ -3,6 +3,5 @@ branch: "main"
 appuser: "{{ansible_user_id}}"
 appgroup: "{{ansible_user_gid}}"
 site_location: /var/www/vue
-app_port: 3000
-vue_url:  http://52.169.68.193
-backend_server_url: "http://34.79.93.245:9090"
+backend_server_url: "http://34.140.81.126:9090"
+

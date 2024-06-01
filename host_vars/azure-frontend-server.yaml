@@ -1,0 +1,3 @@
+app:
+  env:
+    VITE_BACKEND: http://localhost:9090

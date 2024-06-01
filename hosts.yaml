@@ -6,14 +6,16 @@ control:
     control-vm:
       ansible_host: control
 
-appservers:
+backendservers:
     hosts:
-      gcloud-app-server:
+      gcloud-backend-server:
         ansible_host: devops-gcloud
+      azure-backend-server:
+        ansible_host: devops-backend-azure
 
-webservers:
+frontendservers:
     hosts:
-      azure-web-server:
+      azure-frontend-server:
         ansible_host: devops-azure
 
 dbservers:
