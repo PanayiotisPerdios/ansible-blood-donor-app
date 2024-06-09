@@ -1,7 +1,7 @@
-appdir: "{{ ansible_user_dir }}/frontend"
-branch: "main"
-appuser: "{{ansible_user_id}}"
-appgroup: "{{ansible_user_gid}}"
-site_location: /var/www/vue
-backend_server_url: "http://34.140.81.126:9090"
+frontappdir: "{{ ansible_user_dir }}/frontend"
+frontbranch: "main"
+frontappuser: "{{ansible_user_id}}"
+frontappgroup: "{{ansible_user_gid}}"
+frontsite_location: /var/www/vue
+backend_server_url: "http://20.199.11.65:9090"
 

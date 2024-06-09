@@ -1,6 +1,6 @@
-appdir: "{{ ansible_user_dir }}/spring"
-branch: "main"
-appuser: "{{ansible_user_id}}"
-appgroup: "{{ansible_user_gid}}"
-app_port: 9090
-backend_server_url: "http://34.140.81.126:9090"
+backappdir: "{{ ansible_user_dir }}/spring"
+backbranch: "test"
+backappuser: "{{ansible_user_id}}"
+backappgroup: "{{ansible_user_gid}}"
+backapp_port: 9090
+backend_server_url: "http://20.199.11.65:9090"

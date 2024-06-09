@@ -17,35 +17,40 @@
       - name: "Clone the Spring repository"
         git:
             repo: "https://github.com/JohnSkouloudis/BloodDonorApp-Backend"
-            dest: "{{ appdir }}"
-            version: "{{ branch }}"
+            dest: "{{ backappdir }}"
+            version: "{{ backbranch }}"
             force: yes
+
+      - name: Debug app env variables
+        debug:
+          var: backapp.env
 
       - name: "Populate application.properties"
         lineinfile:
-          dest: "{{ appdir }}/src/main/resources/application.properties"
+          dest: "{{ backappdir }}/src/main/resources/application.properties"
           state: present
           regexp: "^{{item.key}}="
           line: "{{item.key}}={{item.value}}"
         with_items:
-          - "{{app.env | dict2items}}"
+          - "{{backapp.env | dict2items}}"
 
       - name: "Ensure mvnw is executable"
         file:
-          path: "{{ appdir }}/mvnw"
+          path: "{{ backappdir }}/mvnw"
           mode: '0755'
           state: file
 
       - name: "Build the Spring application"
         command: "./mvnw package -Dmaven.test.skip "
         args:
-            chdir: "{{ appdir }}"
+            chdir: "{{ backappdir }}"
         become: yes
 
       - name: "Copy spring service file"
         template:
           src: ../files/spring.service.j2
           dest: "/etc/systemd/system/spring.service"
+          
         become: yes
         become_user: root
         notify: restart spring

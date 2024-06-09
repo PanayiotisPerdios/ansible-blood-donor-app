@@ -3,6 +3,11 @@
 
   pre_tasks:
 
+    - name: Update the apt package index
+      apt:
+        update_cache: yes
+      become: yes
+
     - name: "Find my public ip"
       uri:
         url: http://ifconfig.me/ip
@@ -56,40 +61,49 @@
     - name: "Clone the Vue repository"
       git:
           repo: "https://github.com/PanayiotisPerdios/blood-donor-app-frontend"
-          dest: "{{ appdir }}"
-          version: "{{ branch }}"
+          dest: "{{ frontappdir }}"
+          version: "{{ frontbranch }}"
           force: yes
 
     - name: "Copy env file"
-      shell : "cp {{appdir}}/.env {{appdir}}/.env.example"
+      shell : "cp {{frontappdir}}/.env {{frontappdir}}/.env.example"
   
 
     - name: "Populate .env"
       lineinfile:
-          dest: "{{ appdir }}/.env"
+          dest: "{{ frontappdir }}/.env"
           state: present
           regexp: "^{{item.key}}="
           line: "{{item.key}}={{item.value}}"
       with_items:
-          - "{{app.env | dict2items}}"
+          - "{{frontapp.env | dict2items}}"
 
-    - name: "Install dependencies"
+    - name: Install npm dependencies
       shell: |
-        export PATH=$PATH:~/.nvm/versions/node/v20.12.1/bin; npm install
+        export NVM_DIR="$HOME/.nvm"
+        source $NVM_DIR/nvm.sh
+        nvm use default
+        npm install
       args:
-        chdir: "{{ appdir }}"
+        chdir: "{{ frontappdir }}"
+        executable: /bin/bash
 
-    - name: "Build the Vue.js application"
+    - name: Build the Vue.js application
       shell: |
-        export PATH=$PATH:~/.nvm/versions/node/v20.12.1/bin; npm run build
+        export NVM_DIR="$HOME/.nvm"
+        source $NVM_DIR/nvm.sh
+        nvm use default
+        npm run build
       args:
-        chdir: "{{ appdir }}"
+        chdir: "{{ frontappdir }}"
+        executable: /bin/bash
+
 
 
     - name: "Copy dist in nginx location"
       copy:
-        src: "{{ appdir }}/dist/"
-        dest: "{{ site_location }}"
+        src: "{{ frontappdir }}/dist/"
+        dest: "{{ frontsite_location }}"
         remote_src: True
         mode: 7777
         force: true

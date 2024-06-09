@@ -4,7 +4,8 @@ app:
     spring.datasource.username: dbuser
     spring.datasource.password: pass123
     spring.datasource.url: jdbc:postgresql://20.166.249.54:5432/BloodDonors
-    frontend.ip: http://52.169.68.193
+    frontend.ip: http://20.199.11.65
+    
 
 
 service:

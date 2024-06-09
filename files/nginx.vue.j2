@@ -1,5 +1,4 @@
 server {
-
     listen 80;
     client_max_body_size 4G;
 
@@ -10,51 +9,27 @@ server {
         try_files $uri $uri/ /index.html;
     }
 
-
-    location /api/auth {
-        proxy_set_header Host $http_host;
+    location /api {
+        proxy_pass {{backend_server_url}};  # Replace with your actual backend server's address and port
+         proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_redirect off;
-        proxy_buffering off;
-        proxy_pass {{backend_server_url}};
+        
+        # Pass the Authorization header
+        proxy_set_header Authorization $http_authorization;
+
+        # Handle CORS
+        add_header 'Access-Control-Allow-Origin' 'http://20.199.11.65';  # Replace with your actual frontend address
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS';
+        add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, X-Requested-With';
+
+        # Handle preflight requests
+        if ($request_method = OPTIONS) {
+            add_header 'Access-Control-Allow-Origin' 'http://20.199.11.65';  # Replace with your actual frontend address
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS';
+            add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, X-Requested-With';
+            return 204;
+        }
     }
-
-    location /api/application {
-        proxy_set_header Host $http_host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_redirect off;
-        proxy_buffering off;
-        proxy_pass {{backend_server_url}};
-    }
-
-    location /api/hospital {
-        proxy_set_header Host $http_host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_redirect off;
-        proxy_buffering off;
-        proxy_pass {{backend_server_url}};
-    }
-
-    location /api/notifications {
-        proxy_set_header Host $http_host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_redirect off;
-        proxy_buffering off;
-        proxy_pass {{backend_server_url}};
-    }
-
-    location /api/user {
-        proxy_set_header Host $http_host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_redirect off;
-        proxy_buffering off;
-        proxy_pass {{backend_server_url}};
-    }
-
-
 }
