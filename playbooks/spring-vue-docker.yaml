@@ -3,8 +3,8 @@
   become: yes
   tasks:
 
-    - name: Check if Docker is installed
-      shell: docker --version && docker compose version
+    - name: Check if Docker and Docker Compose v2 are installed
+      shell: docker --version && docker-compose version
       register: docker_version_result
       ignore_errors: true
 
@@ -16,42 +16,38 @@
       include_tasks: import_docker_playbook.yml
       when: not docker_installed
 
-    - name: "Clone the Spring repository"
+    - name: Clone the Spring repository
       git:
-        repo: "https://github.com/tsadimasteaching/ds-lab-2023.git"
-        dest: "{{ appdir }}"
-        version: "{{ branch }}"
+        repo: "https://github.com/JohnSkouloudis/BloodDonorApp-Backend"
+        dest: "{{ backappdir }}"
+        version: "{{ backbranch }}"
         force: yes
 
-    - name: "Populate application.properties"
+    - name: Populate application.properties
       lineinfile:
-        dest: "{{ appdir }}/src/main/resources/application.properties"
+        dest: "{{ backappdir }}/src/main/resources/application.properties"
         state: present
         regexp: "^{{item.key}}="
         line: "{{item.key}}={{item.value}}"
       with_items:
-        - "{{app.env | dict2items}}"
+        - "{{backapp.env | dict2items}}"
 
     - name: Tear down existing services
-      community.docker.docker_compose:
-        project_src: "{{ appdir }}"
+      community.docker.docker_compose_v2:
+        project_src: "{{ backappdir }}"
         state: absent
+        
 
     - name: Create and start services
-      docker_compose:
-        project_src: "{{ appdir }}"
-        build: true
+      community.docker.docker_compose_v2:
+        project_src: "{{ backappdir }}"
+        build: always
         state: present
       register: output
       notify: Restart Docker Compose
 
-    - debug:
-        var: output
-
   handlers:
     - name: Restart Docker Compose
-      community.docker.docker_compose:
-        project_src: "{{ appdir }}"
-        restarted: true
-
-
+      community.docker.docker_compose_v2:
+        project_src: "{{ backappdir }}"
+        state: restarted

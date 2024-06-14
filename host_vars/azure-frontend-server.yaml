@@ -1,3 +1,0 @@
-app:
-  env:
-    VITE_BACKEND: http://20.199.11.65:9090

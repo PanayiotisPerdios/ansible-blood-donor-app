@@ -1,0 +1,15 @@
+backapp:
+  env:
+    server.port: "{{backapp_port}}"
+    spring.datasource.username: dbuser
+    spring.datasource.password: pass123
+    spring.datasource.url: jdbc:postgresql://localhost:5432/BloodDonors
+    frontend.ip: http://localhost
+
+frontapp:
+  env:
+    VITE_BACKEND: http://localhost:9090
+
+service:
+  workingdir: "{{ ansible_user_dir }}/spring"
+  execstart: "java -jar target/BloodDonorApp-0.0.1-SNAPSHOT.jar"

@@ -1,5 +1,5 @@
 backappdir: "{{ ansible_user_dir }}/spring"
-backbranch: "test"
+backbranch: "main"
 backappuser: "{{ansible_user_id}}"
 backappgroup: "{{ansible_user_gid}}"
 backapp_port: 9090
